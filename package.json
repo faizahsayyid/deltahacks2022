@@ -1,0 +1,24 @@
+{
+  "name": "deltahacks2022",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "client": "cd client && npm start",
+    "client:install": "cd client && npm i",
+    "client:uninstall": "cd client && npm uninstall"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/faizahsayyid/deltahacks2022.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/faizahsayyid/deltahacks2022/issues"
+  },
+  "homepage": "https://github.com/faizahsayyid/deltahacks2022#readme",
+  "dependencies": {
+    "react-icons": "^4.3.1"
+  }
+}
