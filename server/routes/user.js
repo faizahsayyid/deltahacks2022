@@ -7,8 +7,9 @@ const auth = require("../middleware/auth");
 const router = express.Router();
 
 // unprotected route
-router.route("/register").get(controller.create);
-
+router.route("/register").post(controller.register);
+router.route("/login").post(controller.login);
+router.route("/status").get(controller.status);
 // protected route
 //router.route('/profile').get(authenticated, controller.getProfile);
 

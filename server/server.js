@@ -8,6 +8,7 @@ var cors = require("cors");
 //Store sensitive information to env variables
 const dotenv = require("dotenv");
 dotenv.config();
+const verifyToken = require("./utils/verifyToken");
 
 //mongoDB Atlas Connection String
 const url = process.env.MONGODB_URL;
