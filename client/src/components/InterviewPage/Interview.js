@@ -1,16 +1,40 @@
-import React from "react";
-import { BsFillCameraVideoFill } from "react-icons/bs";
+import { useState } from "react";
+import {
+  BsFillCameraVideoFill,
+  BsFillCameraVideoOffFill,
+} from "react-icons/bs";
+import Recorder from "./Recorder";
+import Webcam from "react-webcam";
 
-const Interview = () => {
+const Interview = ({ question }) => {
+  const [video, setVideo] = useState(false);
+
   return (
-    <div className="col-8" style={{ height: "90vh" }}>
+    <div className="col-8">
       <div className="d-flex flex-column w-100 h-100 justify-content-center align-items-center">
-        <div className="bg-secondary h-50 w-75"></div>
-        <div>
-          <button className="btn btn-primary m-2">
-            <BsFillCameraVideoFill />
+        <h3 className="my-4">{question}</h3>
+        {video ? (
+          <div className="h-50">
+            <Webcam
+              audio={false}
+              videoConstraints={{
+                width: 600,
+                height: 320,
+                facingMode: "user",
+              }}
+            />
+          </div>
+        ) : (
+          <div className="bg-secondary h-50 w-75"></div>
+        )}
+        <div className="mt-2">
+          <button
+            className="btn btn-primary m-2"
+            onClick={() => setVideo(!video)}
+          >
+            {video ? <BsFillCameraVideoFill /> : <BsFillCameraVideoOffFill />}
           </button>
-          <button className="btn btn-danger">Record</button>
+          <Recorder />
         </div>
         <div className="w-100 mt-4 mx-4">
           <h4>Full Analysis:</h4>

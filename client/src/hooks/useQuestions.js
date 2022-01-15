@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 
 const useQuestions = () => {
   const [questions, setQuestions] = useState([]);
+  const { questionId } = useParams();
 
   useEffect(() => {
     setQuestions([
@@ -20,7 +22,7 @@ const useQuestions = () => {
     ]);
   }, []);
 
-  return questions;
+  return { questions, questionId };
 };
 
 export default useQuestions;
