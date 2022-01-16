@@ -22,6 +22,7 @@ const Interview = ({ question }) => {
                 height: 320,
                 facingMode: "user",
               }}
+              mirrored={true}
             />
           </div>
         ) : (
