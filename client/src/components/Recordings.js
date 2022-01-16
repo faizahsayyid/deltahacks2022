@@ -28,7 +28,7 @@ const Recordings = () => {
           return {
             score: 20,
             date: new Date(resData.date).toLocaleDateString("en-US"),
-            file: `https://deltahacks2022.herokuapp.com/audio/8b3af832ef1eb36845a73df86cbd2cf7`,
+            file: `https://deltahacks2022.herokuapp.com/audio/${resData.filename}`,
             qID: resData.questionId,
           };
         });

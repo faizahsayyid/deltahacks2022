@@ -20,6 +20,7 @@ const topicSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  audioName: String,
 });
 
 module.exports = mongoose.model("TopicAnalysis", topicSchema);

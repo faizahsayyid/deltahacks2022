@@ -22,6 +22,7 @@ const sentimentSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  audioName: String,
 });
 
 module.exports = mongoose.model("SentimentAnalysis", sentimentSchema);
