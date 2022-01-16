@@ -83,11 +83,13 @@ exports.getSentimentData = async (req, res) => {
         username: req.body.username,
         sentimentAnalysisResults: data.sentiment_analysis_results,
         questionId: req.body.questionId,
+        audioName: req.body.audio_url.split("/").pop(),
       });
       const Topic = new TopicAnalysis({
         username: req.body.username,
         topicAnalysisResults: data.iab_categories_result,
         questionId: req.body.questionId,
+        audioName: req.body.audio_url.split("/").pop(),
       });
       try {
         const savedTopic = await Topic.save();
@@ -101,10 +103,11 @@ exports.getSentimentData = async (req, res) => {
 
 exports.getAnalysesByUser = async (req, res) => {
   const username = req.query.username;
+
   try {
     if (username) {
-      const topicResult = await TopicAnalysis.find({ username });
-      const sentimentalResult = await SentimentAnalysis.find({ username });
+      const topicResult = TopicAnalysis.find({ username });
+      const sentimentalResult = SentimentAnalysis.find({ username });
       res.status(200).json({
         error: null,
         topicalResults: topicResult,
@@ -114,6 +117,24 @@ exports.getAnalysesByUser = async (req, res) => {
       res.status(400).json({ error: "Username must be defined" });
     }
   } catch (error) {
+    res.status(400).json({ error });
+  }
+};
+
+exports.getAnalysesByAudioName = async (req, res) => {
+  const audioName = req.query.audioName;
+  try {
+    const topicResult = await TopicAnalysis.find({ audioName });
+
+    const sentimentalResult = await SentimentAnalysis.find({ audioName });
+
+    res.status(200).json({
+      error: null,
+      topicalResults: topicResult,
+      sentimentalResults: sentimentalResult,
+    });
+  } catch (error) {
+    console.log(error);
     res.status(400).json({ error });
   }
 };

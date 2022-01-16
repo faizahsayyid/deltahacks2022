@@ -1,19 +1,45 @@
-import { useState, useContext, useRef, useEffect, useCallback } from "react";
+import {
+  useState,
+  useContext,
+  useEffect,
+  useMemo,
+  useCallback,
+  useRef,
+} from "react";
 import useAnalysis from "../hooks/useAnalysis";
 import { GlobalContext } from "../contexts/GlobalContext";
 import useSummary from "../hooks/useSummary";
+import axios from "axios";
+import { useLocation } from "react-router-dom";
+import useQuestions from "../hooks/useQuestions";
+
+function useQuery() {
+  const { search } = useLocation();
+
+  return useMemo(() => new URLSearchParams(search), [search]);
+}
 
 const FullAnalysis = () => {
   //   const { sentimentAnalysis, topicsCovered } = useAnalysis();
   const [isSentiment, setIsSentiment] = useState(false);
-  const [topics, setTopics] = useState(false);
-  const { sentiment, topicsCovered, question, audioURL } =
-    useContext(GlobalContext);
-  useEffect(() => {
-    console.log(audioURL);
-  }, []);
+  const [topic, setTopic] = useState(false);
+  const [blob, setBlob] = useState("");
+  const { questions } = useQuestions();
+
+  const {
+    sentiment,
+    topicsCovered,
+    question,
+    audioURL,
+    setSentiment,
+    setTopics,
+    setQuestion,
+    setAudioUrl,
+  } = useContext(GlobalContext);
+
   const { avgScore, topicSummary } = useSummary();
   const audio = useRef();
+  let query = useQuery();
 
   const setAudio = useCallback((el) => {
     audio.current = el;
@@ -38,11 +64,41 @@ const FullAnalysis = () => {
     return result;
   };
 
+  const loadData = async () => {
+    var config = {
+      method: "get",
+      url: `http://localhost:8080/api/analyze/byAudioName?audioName=${query.get(
+        "audioName"
+      )}`,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    axios(config)
+      .then(function (response) {
+        console.log(response.data.topicalResults[0]);
+        setAudioUrl(
+          `https://deltahacks2022.herokuapp.com/audio/${response.data.topicalResults[0].audioName}`
+        );
+        setQuestion(response.data.topicalResults[0].questionId);
+        setSentiment(response.data.sentimentalResults[0]);
+        setTopics(response.data.topicalResults[0]);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
+  useEffect(() => {
+    loadData();
+    console.log(audioURL);
+  }, []);
   return (
     <div className="d-flex flex-column align-items-center vw-100">
       <h2 className="w-75 my-4">Full Analysis</h2>
       <h4 className="w-75 mb-4">
-        <strong>Question:</strong> {question}
+        <strong>Question:</strong> {questions[question]}
       </h4>
       <audio controls src={audioURL} ref={setAudio} className="w-50 mb-4" />
       <div className="w-75 my-4">
@@ -111,17 +167,17 @@ const FullAnalysis = () => {
           <h2 className="accordion-header">
             <button
               className={
-                topics ? "accordion-button" : "accordion-button collapsed"
+                topic ? "accordion-button" : "accordion-button collapsed"
               }
               type="button"
-              onClick={() => setTopics(!topics)}
+              onClick={() => setTopic(!topic)}
             >
               Topics Covered
             </button>
           </h2>
           <div
             className={
-              topics
+              topic
                 ? "accordion-collapse collapse show"
                 : "accordion-collapse collapse"
             }

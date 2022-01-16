@@ -4,8 +4,25 @@
  */
 
 // Import User model here
-const { Audio } = require("../models");
+const { Audio, TopicAnalysis, SentimentAnalysis } = require("../models");
 
+// exports.getAnalysesWithAudioByUser = async (req, res) => {
+//   try {
+//     if (username) {
+//       const topicResult = await TopicAnalysis.find({ username });
+//       const sentimentalResult = await SentimentAnalysis.find({ username });
+//       const audioFiles = await Audio.find({ username });
+//       res.status(200).json({
+//         "",
+//       })
+//     } else {
+//       res.status(400).json({ error: "Username must be defined" });
+//     }
+
+//   } catch (error) {
+//     res.status(400).json({ error });
+//   }
+// }
 exports.getAllAudioByUser = async (req, res) => {
   const username = req.query.username;
   try {

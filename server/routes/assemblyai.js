@@ -10,7 +10,7 @@ const router = express.Router();
 // unprotected route
 router.route("/").post(controller.getSentimentData);
 router.route("/get").get(controller.getAnalysesByUser);
-
+router.route("/byAudioName").get(controller.getAnalysesByAudioName);
 // protected route
 //router.route('/profile').get(authenticated, controller.getProfile);
 
