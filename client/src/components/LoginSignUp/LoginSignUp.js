@@ -1,12 +1,20 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { useState } from "react";
 import LoginForm from "./LoginForm";
 import SignUpForm from "./SignUpForm";
 import { FaTimes } from "react-icons/fa";
+import useLoginSignUp from "../../hooks/useLoginSignUp";
 
 const LoginSignUp = ({ open, onClose, isLogin }) => {
-  const [login, setLogin] = useState(isLogin);
+  const {
+    login,
+    setLogin,
+    setSubmitted,
+    setSignUpUser,
+    setLoginUser,
+    loginUser,
+    signUpUser,
+  } = useLoginSignUp(isLogin, onClose);
 
   const overlayStyles = {
     position: "fixed",
@@ -41,10 +49,10 @@ const LoginSignUp = ({ open, onClose, isLogin }) => {
               />
             </div>
             <div className="d-flex flex-column align-items-center justify-content-center h-100">
-              <div class="btn-group w-50">
+              <div className="btn-group w-50">
                 <button
                   type="button"
-                  class={
+                  className={
                     login
                       ? "btn btn-success btn-lg"
                       : "btn btn-outline-secondary btn-lg"
@@ -55,7 +63,7 @@ const LoginSignUp = ({ open, onClose, isLogin }) => {
                 </button>
                 <button
                   type="button"
-                  class={
+                  className={
                     !login
                       ? "btn btn-success btn-lg"
                       : "btn btn-outline-secondary btn-lg"
@@ -65,8 +73,18 @@ const LoginSignUp = ({ open, onClose, isLogin }) => {
                   Sign Up
                 </button>
               </div>
-              {login ? <LoginForm /> : <SignUpForm />}
-              <button className="btn btn-outline-primary bg-light btn-lg mt-4">
+              {login ? (
+                <LoginForm loginUser={loginUser} setLoginUser={setLoginUser} />
+              ) : (
+                <SignUpForm
+                  signUpUser={signUpUser}
+                  setSignUpUser={setSignUpUser}
+                />
+              )}
+              <button
+                className="btn btn-outline-primary bg-light btn-lg mt-4"
+                onClick={() => setSubmitted(true)}
+              >
                 {login ? "Login" : "Sign Up"}
               </button>
             </div>

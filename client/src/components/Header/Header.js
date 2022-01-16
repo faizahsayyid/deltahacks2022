@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import LoginSignUp from "../LoginSignUp/LoginSignUp";
+import { GlobalContext } from "../../contexts/GlobalContext";
 
 const Header = () => {
   const [loginPopupOpen, setLoginPopupOpen] = useState(false);
   const [isLogin, setIsLogin] = useState(true);
+  const { isLoggedIn } = useContext(GlobalContext);
 
   const onLogin = () => {
     setIsLogin(true);
@@ -19,16 +21,22 @@ const Header = () => {
     <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
       <div className="container-fluid">
         <Link className="navbar-brand" to="/">
-          Interviewy
+          Interview Companion
         </Link>
-        <div>
-          <button className="btn btn-success me-2" onClick={onLogin}>
-            Login
-          </button>
-          <button className="btn btn-secondary" onClick={onSignUp}>
-            Sign Up
-          </button>
-        </div>
+        {!isLoggedIn ? (
+          <div>
+            <button className="btn btn-success me-2" onClick={onLogin}>
+              Login
+            </button>
+            <button className="btn btn-secondary" onClick={onSignUp}>
+              Sign Up
+            </button>
+          </div>
+        ) : (
+          <Link className="btn btn-success me-2" to="/recordings">
+            Past Recordings
+          </Link>
+        )}
         <LoginSignUp
           open={loginPopupOpen}
           onClose={() => setLoginPopupOpen(false)}
@@ -46,10 +54,10 @@ const Header = () => {
           <span className="navbar-toggler-icon"></span>
         </button> */}
 
-        {/* <div className="collapse navbar-collapse" id="navbarColor01">
+        {/* <div className="collapse navbar-collapse">
           <ul className="navbar-nav me-auto">
             <li className="nav-item">
-              <Link className="nav-link">Features</Link>
+              <Link className="nav-link">Past Recordings</Link>
             </li>
           </ul>
         </div> */}
