@@ -1,26 +1,51 @@
-import React from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { GlobalContext } from "../contexts/GlobalContext";
+import useQuestions from "../hooks/useQuestions";
 
 const Recordings = () => {
-  const recordings = [
-    "Tell Me About Yourself",
-    "What is your greatest strength?",
-    "What is your greatest weakness?",
-    "Tell me about a time you overcame adversity.",
-    "Why should we hire you?",
-    "What do you want to work for us?",
-    "What is your greatest accomplishment?",
-    "What kind of working environment do you work best in?",
-    "Where do you see yourself in 5 years?",
-    "How do you deal with pressure or stressful situation?",
-    "Give an example of when you showed leadership qualities",
-    "How did you hear about this position?",
-  ];
+  const { username } = useContext(GlobalContext);
+  const [recordings, setRecordings] = useState([]);
+  const { questions, questionId } = useQuestions();
 
+  const getPastRecordings = async () => {
+    var axios = require("axios");
+
+    var config = {
+      method: "get",
+      url: `https://deltahacks2022.herokuapp.com/api/audio/get?username=${
+        username === "" ? "demo" : username
+      }`,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    axios(config)
+      .then(function (response) {
+        console.log(JSON.stringify(response.data));
+        var result = response.data.files.map((resData) => {
+          return {
+            score: 20,
+            date: new Date(resData.date).toLocaleDateString("en-US"),
+            file: `https://deltahacks2022.herokuapp.com/audio/8b3af832ef1eb36845a73df86cbd2cf7`,
+            qID: resData.questionId,
+          };
+        });
+        console.log(result);
+        setRecordings(result);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+  useEffect(() => {
+    getPastRecordings();
+  }, []);
   return (
     <div className="vw-100 d-flex flex-column align-items-center">
       <h2 className="my-4">Past Recordings</h2>
-      {recordings.map((q, index) => {
+      {recordings.map((data, index) => {
         return (
           <div className="card w-75 my-2" key={index}>
             <div className="card-body d-flex justify-content-evenly align-items-center">
@@ -28,9 +53,9 @@ const Recordings = () => {
                 <div className="text-secondary text-sm-center">Score</div>
                 <div className="text-success">20%</div>
               </div>
-              <div className="">01/14/2022</div>
-              <div className="w-25">{q}</div>
-              <audio controls />
+              <div className="">{data.date}</div>
+              <div className="w-25">{questions[data.qID]}</div>
+              <audio src={data.file} controls />
               <Link className="btn btn-info" to={`/analysis/${index}`}>
                 Full Analysis
               </Link>

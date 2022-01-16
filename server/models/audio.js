@@ -16,6 +16,7 @@ const audioSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  questionId: Number,
 });
 
 module.exports = mongoose.model("Audio", audioSchema);

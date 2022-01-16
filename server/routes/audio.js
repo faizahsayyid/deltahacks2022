@@ -7,6 +7,7 @@ const allowedMimeTypes = ["audio/wav", "audio/mp3", "audio/mp4", "audio/mpeg"];
 const uploadDest = "./static/audio";
 
 const filter = function (req, file, cb) {
+  console.log("Filtering file");
   if (!allowedMimeTypes.includes(file.mimetype.toLowerCase())) {
     cb(null, false);
   }
@@ -22,9 +23,7 @@ var upload = multer({
 
 const router = express.Router();
 
-router
-  .route("/upload")
-  .post(upload.single("audio_file"), controller.uploadAudio);
+router.route("/upload").post(upload.any(), controller.uploadAudio);
 router.route("/get").get(controller.getAllAudioByUser);
 
 router.route("/status").get(controller.status);

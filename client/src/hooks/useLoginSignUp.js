@@ -30,16 +30,19 @@ const useLoginSignUp = (isLogin, onClose) => {
   useEffect(() => {
     if (isLogin && submitted) {
       axios
-        .post("http://localhost:8080/api/user/login", loginUser)
+        .post("https://deltahacks2022.herokuapp.com/api/user/login", loginUser)
         .then((res) => {
           handleLogin(res.data.data.token, loginUser.username);
         });
     } else if (submitted) {
       axios
-        .post("http://localhost:8080/api/user/register", signUpUser)
+        .post(
+          "https://deltahacks2022.herokuapp.com/api/user/register",
+          signUpUser
+        )
         .then((res) => {
           axios
-            .post("http://localhost:8080/api/user/login", {
+            .post("https://deltahacks2022.herokuapp.com/api/user/login", {
               username: signUpUser.username,
               password: signUpUser.password,
             })

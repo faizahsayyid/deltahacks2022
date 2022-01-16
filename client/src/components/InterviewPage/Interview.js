@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import {
   BsFillCameraVideoFill,
   BsFillCameraVideoOffFill,
@@ -6,9 +6,11 @@ import {
 import Recorder from "./Recorder";
 import Webcam from "react-webcam";
 import { Link } from "react-router-dom";
+import { GlobalContext } from "../../contexts/GlobalContext";
 
 const Interview = ({ question }) => {
   const [video, setVideo] = useState(false);
+  const { username } = useContext(GlobalContext);
 
   return (
     <div className="col-8">
@@ -52,6 +54,7 @@ const Interview = ({ question }) => {
             </div>
             <div className="d-flex">
               <h6 className="w-25 text-secondary">Topics You Covered: </h6>
+
               <span>
                 Environment: {0.865 * 100}%, Industries:
                 {1.0 * 100}%, Politics: {0.165 * 100}%, Technology
