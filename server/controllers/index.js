@@ -3,5 +3,6 @@
  */
 
 const user = require("./user");
+const assemblyai = require("./assembyai");
 
-module.exports = { user };
+module.exports = { user, assemblyai };
