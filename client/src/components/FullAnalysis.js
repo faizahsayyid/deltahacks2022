@@ -81,7 +81,7 @@ const FullAnalysis = () => {
         setAudioUrl(
           `https://deltahacks2022.herokuapp.com/audio/${response.data.topicalResults[0].audioName}`
         );
-        setQuestion(questions[response.data.topicalResults[0].questionId]);
+        setQuestion(response.data.topicalResults[0].questionId);
         setSentiment(response.data.sentimentalResults[0]);
         setTopics(response.data.topicalResults[0]);
       })
@@ -98,7 +98,7 @@ const FullAnalysis = () => {
     <div className="d-flex flex-column align-items-center vw-100">
       <h2 className="w-75 my-4">Full Analysis</h2>
       <h4 className="w-75 mb-4">
-        <strong>Question:</strong> {question}
+        <strong>Question:</strong> {questions[question]}
       </h4>
       <audio controls src={audioURL} ref={setAudio} className="w-50 mb-4" />
       <div className="w-75 my-4">
