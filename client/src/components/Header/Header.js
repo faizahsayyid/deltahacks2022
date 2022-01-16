@@ -1,7 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import LoginSignUp from "../LoginSignUp/LoginSignUp";
 
 const Header = () => {
+  const [loginPopupOpen, setLoginPopupOpen] = useState(false);
+  const [isLogin, setIsLogin] = useState(true);
+
+  const onLogin = () => {
+    setIsLogin(true);
+    setLoginPopupOpen(true);
+  };
+  const onSignUp = () => {
+    setIsLogin(false);
+    setLoginPopupOpen(true);
+  };
+
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
       <div className="container-fluid">
@@ -9,9 +22,18 @@ const Header = () => {
           Interviewy
         </Link>
         <div>
-          <button className="btn btn-success me-2">Login</button>
-          <button className="btn btn-secondary">Sign Up</button>
+          <button className="btn btn-success me-2" onClick={onLogin}>
+            Login
+          </button>
+          <button className="btn btn-secondary" onClick={onSignUp}>
+            Sign Up
+          </button>
         </div>
+        <LoginSignUp
+          open={loginPopupOpen}
+          onClose={() => setLoginPopupOpen(false)}
+          isLogin={isLogin}
+        />
         {/* <button
           className="navbar-toggler"
           type="button"
