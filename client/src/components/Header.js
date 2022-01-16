@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react";
 import { Link } from "react-router-dom";
-import LoginSignUp from "../LoginSignUp/LoginSignUp";
-import { GlobalContext } from "../../contexts/GlobalContext";
+import LoginSignUp from "./LoginSignUp/LoginSignUp";
+import { GlobalContext } from "../contexts/GlobalContext";
 
 const Header = () => {
   const [loginPopupOpen, setLoginPopupOpen] = useState(false);
@@ -21,7 +21,7 @@ const Header = () => {
     <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
       <div className="container-fluid">
         <Link className="navbar-brand" to="/">
-          Interview Companion
+          Interviewy
         </Link>
         {!isLoggedIn ? (
           <div>

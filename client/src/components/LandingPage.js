@@ -12,7 +12,7 @@ const LandingPage = () => {
       className="d-flex flex-column align-items-center justify-content-center vw-100"
       style={{ height: "90vh" }}
     >
-      <h1 className="text-success mb-4">Interview Companion</h1>
+      <h1 className="text-success mb-4">Interviewy</h1>
       <div className="d-flex my-4">
         <div className="card mx-4">
           <div className="card-body d-flex align-items-center justify-content-center flex-column">
