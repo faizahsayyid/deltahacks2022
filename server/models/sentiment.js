@@ -17,7 +17,7 @@ const sentimentSchema = new mongoose.Schema({
     max: 16,
   },
   sentimentAnalysisResults: [sentimentAnalysisScehma],
-
+  questionId: Number,
   date: {
     type: Date,
     default: Date.now,

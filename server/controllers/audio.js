@@ -7,7 +7,7 @@
 const { Audio } = require("../models");
 
 exports.getAllAudioByUser = async (req, res) => {
-  const username = req.body.username;
+  const username = req.query.username;
   try {
     if (username) {
       const audioFiles = await Audio.find({ username });
@@ -24,9 +24,13 @@ exports.getAllAudioByUser = async (req, res) => {
   }
 };
 exports.uploadAudio = async (req, res) => {
-  const audioFile = new Audio({ username: req.body.username, ...req.file });
-
   try {
+    const audioFile = new Audio({
+      username: req.body.username,
+      questionId: req.body.questionId,
+      ...req.files[0],
+    });
+    console.log(audioFile);
     const savedAudioFile = await audioFile.save();
     res.json({
       error: null,

@@ -15,7 +15,7 @@ const topicSchema = new mongoose.Schema({
     max: 255,
   },
   topicAnalysisResults: [topicAnalysisSchema],
-
+  questionId: Number,
   date: {
     type: Date,
     default: Date.now,

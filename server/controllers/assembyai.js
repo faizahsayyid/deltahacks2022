@@ -83,10 +83,12 @@ exports.getSentimentData = async (req, res) => {
       const Sentiment = new SentimentAnalysis({
         username: req.body.username,
         sentimentAnalysisResults: data.sentiment_analysis_results,
+        questionId: req.body.questionId,
       });
       const Topic = new TopicAnalysis({
         username: req.body.username,
         topicAnalysisResults: data.iab_categories_result,
+        questionId: req.body.questionId,
       });
       try {
         const savedTopic = await Topic.save();
@@ -99,7 +101,7 @@ exports.getSentimentData = async (req, res) => {
 };
 
 exports.getAnalysesByUser = async (req, res) => {
-  const username = req.body.username;
+  const username = req.query.username;
   try {
     if (username) {
       const topicResult = await TopicAnalysis.find({ username });
