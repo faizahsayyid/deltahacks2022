@@ -1,16 +1,35 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect, useMemo } from "react";
 import useAnalysis from "../hooks/useAnalysis";
 import { GlobalContext } from "../contexts/GlobalContext";
 import useSummary from "../hooks/useSummary";
+import axios from "axios";
+import { useLocation } from "react-router-dom";
+
+function useQuery() {
+  const { search } = useLocation();
+
+  return useMemo(() => new URLSearchParams(search), [search]);
+}
 
 const FullAnalysis = () => {
   //   const { sentimentAnalysis, topicsCovered } = useAnalysis();
   const [isSentiment, setIsSentiment] = useState(false);
-  const [topics, setTopics] = useState(false);
-  const { sentiment, topicsCovered, question, audioUrl } =
-    useContext(GlobalContext);
+  const [topic, setTopic] = useState(false);
+  const [blob, setBlob] = useState("");
+
+  const {
+    sentiment,
+    topicsCovered,
+    question,
+    audioUrl,
+    setSentiment,
+    setTopics,
+    setQuestion,
+    setAudioUrl,
+  } = useContext(GlobalContext);
 
   const { avgScore, topicSummary } = useSummary();
+  let query = useQuery();
 
   const getTopic = (list) => {
     let result = "";
@@ -25,6 +44,38 @@ const FullAnalysis = () => {
     return result;
   };
 
+  const loadData = async () => {
+    var config = {
+      method: "get",
+      url: `http://localhost:8080/api/analyze/byAudioName?audioName=${query.get(
+        "audioName"
+      )}`,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    axios(config)
+      .then(function (response) {
+        // console.log(JSON.stringify(response.data));
+        console.log(
+          response.data.sentimentalResults[0].sentimentAnalysisResults
+        );
+
+        console.log(response.data.topicalResults[0]);
+        setAudioUrl();
+        setSentiment(response.data.sentimentalResults[0]);
+        setTopics(response.data.topicalResults[0]);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
+  useEffect(() => {
+    loadData();
+    console.log(sentiment);
+  }, []);
   return (
     <div className="d-flex flex-column align-items-center vw-100">
       <h2 className="w-75 my-4">Full Analysis</h2>
@@ -88,17 +139,17 @@ const FullAnalysis = () => {
           <h2 className="accordion-header">
             <button
               className={
-                topics ? "accordion-button" : "accordion-button collapsed"
+                topic ? "accordion-button" : "accordion-button collapsed"
               }
               type="button"
-              onClick={() => setTopics(!topics)}
+              onClick={() => setTopic(!topic)}
             >
               Topics Covered
             </button>
           </h2>
           <div
             className={
-              topics
+              topic
                 ? "accordion-collapse collapse show"
                 : "accordion-collapse collapse"
             }

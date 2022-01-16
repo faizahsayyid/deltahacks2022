@@ -25,14 +25,16 @@ const Recordings = () => {
       .then(function (response) {
         console.log(JSON.stringify(response.data));
         var result = response.data.files.map((resData) => {
+          console.log(resData.filename);
           return {
             score: 20,
             date: new Date(resData.date).toLocaleDateString("en-US"),
             file: `https://deltahacks2022.herokuapp.com/audio/${resData.filename}`,
             qID: resData.questionId,
+            audioName: resData.filename,
           };
         });
-        console.log(result);
+
         setRecordings(result);
       })
       .catch(function (error) {
@@ -56,7 +58,10 @@ const Recordings = () => {
               <div className="">{data.date}</div>
               <div className="w-25">{questions[data.qID]}</div>
               <audio src={data.file} controls />
-              <Link className="btn btn-info" to={`/analysis/${index}`}>
+              <Link
+                className="btn btn-info"
+                to={`/analysis/${index}/?audioName=${data.audioName}`}
+              >
                 Full Analysis
               </Link>
             </div>
