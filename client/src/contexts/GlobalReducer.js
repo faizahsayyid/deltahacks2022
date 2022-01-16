@@ -17,7 +17,7 @@ const GlobalReducer = (state, action) => {
     case GLOBAL_ACTIONS.SET_QUESTION:
       return { ...state, question: action.payload };
     case GLOBAL_ACTIONS.SET_AUDIO_URL:
-      return { ...state, audioUrl: action.payload };
+      return { ...state, audioURL: action.payload };
     default:
       return state;
   }

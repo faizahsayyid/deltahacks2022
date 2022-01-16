@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useRef, useEffect, useCallback } from "react";
 import useAnalysis from "../hooks/useAnalysis";
 import { GlobalContext } from "../contexts/GlobalContext";
 import useSummary from "../hooks/useSummary";
@@ -7,10 +7,23 @@ const FullAnalysis = () => {
   //   const { sentimentAnalysis, topicsCovered } = useAnalysis();
   const [isSentiment, setIsSentiment] = useState(false);
   const [topics, setTopics] = useState(false);
-  const { sentiment, topicsCovered, question, audioUrl } =
+  const { sentiment, topicsCovered, question, audioURL } =
     useContext(GlobalContext);
-
+  useEffect(() => {
+    console.log(audioURL);
+  }, []);
   const { avgScore, topicSummary } = useSummary();
+  const audio = useRef();
+
+  const setAudio = useCallback((el) => {
+    audio.current = el;
+  });
+
+  const onTimeStampClick = (time) => {
+    if (audio.current) {
+      audio.current.currentTime = time;
+    }
+  };
 
   const getTopic = (list) => {
     let result = "";
@@ -31,7 +44,7 @@ const FullAnalysis = () => {
       <h4 className="w-75 mb-4">
         <strong>Question:</strong> {question}
       </h4>
-      <audio controls src={audioUrl} className="w-50 mb-4" />
+      <audio controls src={audioURL} ref={setAudio} className="w-50 mb-4" />
       <div className="w-75 my-4">
         <div className="d-flex w-100">
           <h6 className="w-25 text-secondary">Average Confidence:</h6>
@@ -77,7 +90,17 @@ const FullAnalysis = () => {
                         </span>
                       </div>
                       <div className="text-secondary w-50">{element.text}</div>
-                      <div>Timestamp: {element.start} secs</div>
+                      <div>
+                        Timestamp:{" "}
+                        <span
+                          className="text-info"
+                          style={{ cursor: "pointer" }}
+                          onClick={() => onTimeStampClick(element.start / 1000)}
+                        >
+                          {element.start}
+                        </span>{" "}
+                        ms
+                      </div>
                     </li>
                   ))}
               </ul>
@@ -116,7 +139,18 @@ const FullAnalysis = () => {
                           <strong className="text-dark">Words Spoken:</strong>{" "}
                           {element.text}
                         </div>
-                        <div className="">Timestamp: 1:10</div>
+                        <div className="">
+                          Timestamp:{" "}
+                          <span
+                            className="text-info"
+                            style={{ cursor: "pointer" }}
+                            onClick={() =>
+                              onTimeStampClick(element.timestamp.start / 1000)
+                            }
+                          >
+                            {element.timestamp.start}
+                          </span>
+                        </div>
                       </li>
                     )
                   )}
