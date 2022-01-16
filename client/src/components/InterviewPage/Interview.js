@@ -5,6 +5,7 @@ import {
 } from "react-icons/bs";
 import Recorder from "./Recorder";
 import Webcam from "react-webcam";
+import { Link } from "react-router-dom";
 
 const Interview = ({ question }) => {
   const [video, setVideo] = useState(false);
@@ -37,13 +38,28 @@ const Interview = ({ question }) => {
           </button>
           <Recorder />
         </div>
-        <div className="w-100 mt-4 mx-4">
-          <h4>Full Analysis:</h4>
-          <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur
-            in repellendus cumque accusamus. Sint sit temporibus, odio esse amet
-            ex nesciunt! Totam, ad. Ullam, aliquam? Non enim quae et corrupti.
-          </p>
+        <div className="w-100 mt-2 mx-4">
+          <div className="d-flex justify-content-between mb-3 border-top pt-3">
+            <h4>Analysis:</h4>{" "}
+            <Link className="btn btn-outline-info" to={`/analysis/${1}`}>
+              See Full Analysis
+            </Link>
+          </div>
+          <div>
+            <div className="d-flex">
+              <h6 className="w-25 text-secondary">Average Confidence:</h6>
+              <span className="text-success">20%</span>
+            </div>
+            <div className="d-flex">
+              <h6 className="w-25 text-secondary">Topics You Covered: </h6>
+              <span>
+                Environment: {0.865 * 100}%, Industries:
+                {1.0 * 100}%, Politics: {0.165 * 100}%, Technology
+                {"&"}
+                Computing: {0.15 * 100}%
+              </span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
