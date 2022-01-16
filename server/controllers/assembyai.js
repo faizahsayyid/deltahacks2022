@@ -9,7 +9,6 @@ const timeout = require("../utils/timeout");
 const { SentimentAnalysis, TopicAnalysis, Audio } = require("../models");
 
 //Export all user model functions
-
 // Create and Save a new User
 const queueSentiment = async (url) => {
   const id = axios({
