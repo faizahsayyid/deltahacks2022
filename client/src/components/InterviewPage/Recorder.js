@@ -26,7 +26,7 @@ const Recorder = () => {
     data.append("questionId", questionId);
     var config = {
       method: "post",
-      url: "http://localhost:8080/api/audio/upload",
+      url: "https://deltahacks2022.herokuapp.com/api/audio/upload",
 
       data: data,
     };
@@ -52,7 +52,7 @@ const Recorder = () => {
 
     var config = {
       method: "post",
-      url: "http://localhost:8080/api/analyze/",
+      url: "https://deltahacks2022.herokuapp.com/api/analyze/",
       headers: {
         "Content-Type": "application/json",
       },

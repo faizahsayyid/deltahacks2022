@@ -13,7 +13,7 @@ const Recordings = () => {
 
     var config = {
       method: "get",
-      url: `http://localhost:8080/api/audio/get?username=${
+      url: `https://deltahacks2022.herokuapp.com/api/audio/get?username=${
         username === "" ? "demo" : username
       }`,
       headers: {
@@ -28,7 +28,7 @@ const Recordings = () => {
           return {
             score: 20,
             date: new Date(resData.date).toLocaleDateString("en-US"),
-            file: `http://localhost:8080/audio/${resData.filename}`,
+            file: `https://deltahacks2022.herokuapp.com/audio/8b3af832ef1eb36845a73df86cbd2cf7`,
             qID: resData.questionId,
           };
         });
