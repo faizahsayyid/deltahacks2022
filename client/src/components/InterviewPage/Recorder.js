@@ -9,11 +9,20 @@ import useQuestions from "../../hooks/useQuestions";
 const Recorder = () => {
   let [audioURL, isRecording, startRecording, stopRecording, blob] =
     useRecorder();
+
   const [isLoading, setIsLoading] = useState(false);
 
   const { questions, questionId } = useQuestions();
 
-  const { username } = useContext(GlobalContext);
+  const {
+    username,
+    isAnalysisLoading,
+    setIsAnalysisLoading,
+    setSentiment,
+    setTopics,
+    setQuestion,
+    setAudioUrl,
+  } = useContext(GlobalContext);
 
   async function uploadAudio() {
     var file = new File([blob], "mediaFile", {
@@ -43,7 +52,7 @@ const Recorder = () => {
     await getAnalysis(response.data.url);
   }
   async function getAnalysis(url) {
-    setIsLoading(true);
+    setIsAnalysisLoading(true);
     var data = JSON.stringify({
       username: username === "" ? "demo" : username,
       audio_url: url,
@@ -61,20 +70,26 @@ const Recorder = () => {
 
     axios(config)
       .then(function (response) {
-        console.log(JSON.stringify(response.data));
-        setIsLoading(false);
+        console.log(response.data);
+        setSentiment(response.data.savedSentiment);
+        setTopics(response.data.savedTopic);
+        setIsAnalysisLoading(false);
+        setQuestion(questions[questionId]);
+        setAudioUrl(audioURL);
       })
       .catch(function (error) {
         console.log(error);
       });
   }
   return (
-    <span>
+    <div className="d-inline-flex">
       <button
         className={
-          isRecording ? "btn btn-danger btn-outline-danger" : "btn btn-danger"
+          isRecording
+            ? "btn btn-danger btn-sm btn-outline-danger"
+            : "btn btn-sm btn-danger"
         }
-        disabled={isRecording || isLoading}
+        disabled={isRecording || isAnalysisLoading}
         onClick={startRecording}
       >
         {isRecording ? "Recording in progress..." : "Record"}
@@ -84,29 +99,29 @@ const Recorder = () => {
         <button
           className="btn btn-danger ms-1"
           onClick={stopRecording}
-          disabled={isLoading}
+          disabled={isAnalysisLoading}
         >
           <BsFillStopFill />
         </button>
       )}
       {audioURL &&
-        (isLoading ? (
+        (isAnalysisLoading ? (
           <div className="spinner-border ms-2" role="status"></div>
         ) : (
           <button
-            className="btn btn-success ms-1"
+            className="btn btn-success btn-sm ms-2"
             onClick={async () => {
               uploadAudio();
             }}
-            disabled={isLoading}
+            disabled={isAnalysisLoading}
           >
             Submit
             <BsCheckLg />
           </button>
         ))}
 
-      <audio src={audioURL} controls />
-    </span>
+      <audio src={audioURL} className="ms-2 " controls />
+    </div>
   );
 };
 

@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import {
   BsFillCameraVideoFill,
   BsFillCameraVideoOffFill,
@@ -7,10 +7,14 @@ import Recorder from "./Recorder";
 import Webcam from "react-webcam";
 import { Link } from "react-router-dom";
 import { GlobalContext } from "../../contexts/GlobalContext";
+import useSummary from "../../hooks/useSummary";
 
 const Interview = ({ question }) => {
   const [video, setVideo] = useState(false);
-  const { username } = useContext(GlobalContext);
+  const { username, isAnalysisLoading, sentiment, topicsCovered } =
+    useContext(GlobalContext);
+
+  const { avgScore, topicSummary } = useSummary();
 
   return (
     <div className="col-8">
@@ -31,7 +35,7 @@ const Interview = ({ question }) => {
         ) : (
           <div className="bg-secondary h-50 w-75"></div>
         )}
-        <div className="mt-2">
+        <div className="mt-3">
           <button
             className="btn btn-primary m-2"
             onClick={() => setVideo(!video)}
@@ -40,30 +44,26 @@ const Interview = ({ question }) => {
           </button>
           <Recorder />
         </div>
-        <div className="w-100 mt-2 mx-4">
-          <div className="d-flex justify-content-between mb-3 border-top pt-3">
-            <h4>Analysis:</h4>{" "}
-            <Link className="btn btn-outline-info" to={`/analysis/${1}`}>
-              See Full Analysis
-            </Link>
-          </div>
-          <div>
-            <div className="d-flex">
-              <h6 className="w-25 text-secondary">Average Confidence:</h6>
-              <span className="text-success">20%</span>
+        {!isAnalysisLoading && sentiment && (
+          <div className="w-100 mt-2 mx-4">
+            <div className="d-flex justify-content-between mb-3 border-top pt-3">
+              <h4>Analysis:</h4>{" "}
+              <Link className="btn btn-outline-info" to={`/analysis/${1}`}>
+                See Full Analysis
+              </Link>
             </div>
-            <div className="d-flex">
-              <h6 className="w-25 text-secondary">Topics You Covered: </h6>
-
-              <span>
-                Environment: {0.865 * 100}%, Industries:
-                {1.0 * 100}%, Politics: {0.165 * 100}%, Technology
-                {"&"}
-                Computing: {0.15 * 100}%
-              </span>
+            <div>
+              <div className="d-flex">
+                <h6 className="w-25 text-secondary">Average Confidence:</h6>
+                <span className="text-success">{avgScore}%</span>
+              </div>
+              <div className="d-flex">
+                <h6 className="w-25 text-secondary">Topics You Covered: </h6>
+                <span>{topicSummary}</span>
+              </div>
             </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );
