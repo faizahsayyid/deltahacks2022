@@ -5,10 +5,6 @@ import { BsFillStopFill } from "react-icons/bs";
 const Recorder = () => {
   let [audioURL, isRecording, startRecording, stopRecording] = useRecorder();
 
-  useEffect(() => {
-    console.log(audioURL);
-  }, [audioURL]);
-
   return (
     <span>
       <button
