@@ -1,3 +1,5 @@
+const Joi = require("joi");
+
 //Validation Rules for new user registration
 const registerValidation = (data) => {
   const schema = Joi.object({
