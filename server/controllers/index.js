@@ -4,5 +4,5 @@
 
 const user = require("./user");
 const assemblyai = require("./assembyai");
-
-module.exports = { user, assemblyai };
+const audio = require("./audio");
+module.exports = { user, assemblyai, audio };

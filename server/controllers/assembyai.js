@@ -6,7 +6,7 @@ const axios = require("axios");
 
 const timeout = require("../utils/timeout");
 // Import User model here
-const { SentimentAnalysis, TopicAnalysis } = require("../models");
+const { SentimentAnalysis, TopicAnalysis, Audio } = require("../models");
 
 //Export all user model functions
 
@@ -58,11 +58,14 @@ getSentiment = async (id) => {
     },
   }).then((data) => {
     const status = data.data.status;
+
     if (status == "processing" || status == "queued") {
       delay();
+
       return getSentiment(id);
     } else {
-      console.log("Processing Done!", data.data);
+      console.log("Processing Done!");
+
       return {
         sentiment_analysis_results: data.data.sentiment_analysis_results,
         iab_categories_result: data.data.iab_categories_result,
@@ -72,25 +75,44 @@ getSentiment = async (id) => {
   return results;
 };
 
-exports.getSentimentData = async (data) => {
-  await queueSentiment(data.audio_url)
+exports.getSentimentData = async (req, res) => {
+  await queueSentiment(req.body.audio_url)
     .then((id) => getSentiment(id))
-    .then((data) => {
+    .then(async (data) => {
       console.log(data);
-      const sentiment = new SentimentAnalysis({
-        username: data.username,
+      const Sentiment = new SentimentAnalysis({
+        username: req.body.username,
         sentimentAnalysisResults: data.sentiment_analysis_results,
       });
-      const topic = new TopicAnalysis({
-        username: data.username,
+      const Topic = new TopicAnalysis({
+        username: req.body.username,
         topicAnalysisResults: data.iab_categories_result,
       });
-
-      return JSON.stringify({ sentiment, topic });
+      try {
+        const savedTopic = await Topic.save();
+        const savedSentiment = await Sentiment.save();
+        res.status(200).json({ savedTopic, savedSentiment });
+      } catch (error) {
+        res.status(400).json({ error });
+      }
     });
 };
 
-exports.uploadAudio = async (req, res) => {
-  // console.log(req.file);
-  res.send(req.file);
+exports.getAnalysesByUser = async (req, res) => {
+  const username = req.body.username;
+  try {
+    if (username) {
+      const topicResult = await TopicAnalysis.find({ username });
+      const sentimentalResult = await SentimentAnalysis.find({ username });
+      res.status(200).json({
+        error: null,
+        topicalResults: topicResult,
+        sentimentalResults: sentimentalResult,
+      });
+    } else {
+      res.status(400).json({ error: "Username must be defined" });
+    }
+  } catch (error) {
+    res.status(400).json({ error });
+  }
 };
