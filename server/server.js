@@ -31,7 +31,7 @@ connect.then(
   }
 );
 
-//Define Express Server (Could move this to it's own file such as app.js)
+//Define Express Server (Could move this to its own file such as app.js)
 const app = express();
 // parse requests of content-type - application/json; app.use(express.json());
 app.use(express.json());
