@@ -36,6 +36,7 @@ const app = express();
 // parse requests of content-type - application/json; app.use(express.json());
 app.use(express.json());
 app.use(cors());
+app.use(express.static("./static"));
 
 // parse requests of content-type - application/x-www-form-urlencoded; app.use(express.urlencoded({ extended: true }));
 app.use(express.urlencoded({ extended: true }));

@@ -2,6 +2,11 @@ const mongoose = require("mongoose");
 
 // Schema defined through mongoose docs
 
+const topicAnalysisSchema = new mongoose.Schema({
+  results: [],
+  summary: Map,
+});
+
 const topicSchema = new mongoose.Schema({
   username: {
     type: String,
@@ -9,9 +14,7 @@ const topicSchema = new mongoose.Schema({
     min: 6,
     max: 255,
   },
-  topicAnalysisResults: [String],
-
-
+  topicAnalysisResults: [topicAnalysisSchema],
 
   date: {
     type: Date,

@@ -2,14 +2,21 @@ const mongoose = require("mongoose");
 
 // Schema defined through mongoose docs
 
+const sentimentAnalysisScehma = new mongoose.Schema({
+  text: String,
+  start: Number,
+  end: Number,
+  sentiment: String,
+  confidence: Number,
+});
 const sentimentSchema = new mongoose.Schema({
   username: {
     type: String,
     required: true,
     min: 6,
-    max: 255,
+    max: 16,
   },
-  sentimentAnalysisResults: [String],
+  sentimentAnalysisResults: [sentimentAnalysisScehma],
 
   date: {
     type: Date,
@@ -17,4 +24,4 @@ const sentimentSchema = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model("AssemblyAI", assemblyAISchema);
+module.exports = mongoose.model("SentimentAnalysis", sentimentSchema);
